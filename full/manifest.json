@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-07-26T03:46:49.973Z",
-  "count": 88275,
+  "generatedAt": "2026-07-26T04:11:45.664Z",
+  "count": 90001,
   "chunkSize": 1000,
   "chunks": [
     "chunk-000.json",
@@ -91,10 +91,13 @@
     "chunk-085.json",
     "chunk-086.json",
     "chunk-087.json",
-    "chunk-088.json"
+    "chunk-088.json",
+    "chunk-089.json",
+    "chunk-090.json"
   ],
   "sources": {
     "Cleveland Museum of Art": 38482,
-    "Art Institute of Chicago": 49793
+    "Art Institute of Chicago": 49793,
+    "Rijksmuseum": 1726
   }
 }
