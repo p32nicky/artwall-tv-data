@@ -1,0 +1,40 @@
+name: Build Rijksmuseum catalog
+
+# Rijksmuseum's keyless data API (data.rijksmuseum.nl) is reachable from runners.
+# Fetch public-domain works with images and append shards to the catalog.
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "Max Rijksmuseum works to append (0 = all ~700k)"
+        required: true
+        default: "2000"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Fetch Rijksmuseum and append shards
+        env:
+          RIJKS_LIMIT: ${{ github.event.inputs.limit }}
+          CONCURRENCY: "12"
+        run: node scripts/fetch-rijks.mjs
+      - name: Commit updated catalog
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add full/
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Append Rijksmuseum works (limit=${{ github.event.inputs.limit }})"
+            git push
+          fi
