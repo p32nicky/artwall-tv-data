@@ -22,6 +22,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+      - name: Diagnose Met reachability
+        run: |
+          echo "departments: $(curl -s -o /dev/null -w '%{http_code}' https://collectionapi.metmuseum.org/public/v1/departments)"
+          echo "object 436535: $(curl -s -o /dev/null -w '%{http_code}' https://collectionapi.metmuseum.org/public/v1/objects/436535)"
+          echo "objects list: $(curl -s -o /dev/null -w '%{http_code} %{size_download}bytes' https://collectionapi.metmuseum.org/public/v1/objects)"
+          echo "--- body sample ---"
+          curl -s https://collectionapi.metmuseum.org/public/v1/objects/436535 | head -c 200 || true
       - name: Fetch Met and append shards
         env:
           MET_LIMIT: ${{ github.event.inputs.limit }}
